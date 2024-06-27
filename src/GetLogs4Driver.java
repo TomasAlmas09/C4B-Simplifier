@@ -1,3 +1,4 @@
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -55,6 +56,14 @@ public class GetLogs4Driver {
             // Verifica o código de saída do comando adb pull
             if (pullExitCode == 0) {
                 simplifier.logMessage("Logs do 4Driver recolhidos com sucesso.");
+
+                // Abrir o diretório no explorador de arquivos após a conclusão do pull
+                File logsFolder = new File("4Driver Logs");
+                if (logsFolder.exists() && logsFolder.isDirectory()) {
+                    Desktop.getDesktop().open(logsFolder);
+                } else {
+                    simplifier.logMessage("Pasta '4Driver Logs' não encontrada para abrir.");
+                }
             } else {
                 simplifier.logMessage("Falha ao recolher logs do 4Driver. Código de saída: " + pullExitCode);
             }

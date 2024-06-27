@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -70,6 +71,11 @@ public class ScreenShot {
 
             // Exibe mensagem de sucesso
             JOptionPane.showMessageDialog(null, "Captura de ecrã " + screenshotFileName + " salva com sucesso na pasta Screenshots!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+
+            // Abre a pasta Screenshots no gerenciador de arquivos
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(screenshotsDir);
+
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao capturar a ecrã.", "Erro", JOptionPane.ERROR_MESSAGE);

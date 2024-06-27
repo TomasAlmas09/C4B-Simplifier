@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -105,6 +106,13 @@ public class GetLogs4Mobi {
                 File localFile = new File(localFilePath);
                 if (localFile.exists()) {
                     logMessage(logArea, "Arquivo copiado com sucesso para " + localFilePath);
+                    // Abrir o diretório no explorador de arquivos após a conclusão do pull
+                    File logsFolder = new File("4Mobi Logs");
+                    if (logsFolder.exists() && logsFolder.isDirectory()) {
+                        Desktop.getDesktop().open(logsFolder);
+                    } else {
+                        logMessage(logArea, "Pasta '4Driver Logs' não encontrada para abrir.");
+                    }
                 } else {
                     logMessage(logArea, "Falha ao copiar o arquivo para " + localLogsDirectory);
                 }
@@ -151,5 +159,4 @@ public class GetLogs4Mobi {
             return 0;
         }
     }
-
 }

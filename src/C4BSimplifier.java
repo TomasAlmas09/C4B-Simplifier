@@ -16,7 +16,7 @@ public class C4BSimplifier extends JFrame {
         setTitle("Card4b - Simplifier"); // Define o título da janela
         setSize(700, 600); // Define o tamanho da janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Encerra o programa ao fechar a janela
-        setLocationRelativeTo(null); // Centraliza a janela na ecrã
+        setLocationRelativeTo(null); // Centraliza a janela na tela
         setLayout(new BorderLayout()); // Define o layout da janela como BorderLayout
 
         // Criar pastas "APK", "logs" e "4Driver Logs" se não existirem
@@ -24,6 +24,7 @@ public class C4BSimplifier extends JFrame {
         createDirectoryIfNotExists("4Mobi Logs");
         createDirectoryIfNotExists("4Driver Logs");
         createDirectoryIfNotExists("Screenshots");
+        createDirectoryIfNotExists("Recordings");
 
         // Painel superior com logo e título
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Cria um painel com layout de fluxo centralizado
@@ -37,24 +38,45 @@ public class C4BSimplifier extends JFrame {
         titlePanel.add(titleLabel); // Adiciona o título ao painel
         add(titlePanel, BorderLayout.NORTH); // Adiciona o painel ao norte da janela principal
 
+        // Botão para abrir helper.txt
+        JButton helperButton = new JButton("Help"); // Cria um botão com o texto "Help"
+        helperButton.setPreferredSize(new Dimension(30, 30)); // Define o tamanho pequeno
+        helperButton.setToolTipText("Abrir helper.txt");
+        helperButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openHelperFile();
+            }
+        });
+        titlePanel.add(helperButton);
+
         // Ícone do aplicativo
         setIconImage(originalIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH)); // Define o ícone da aplicação
 
         // Painel central com botões
         JPanel buttonPanel = new JPanel(new GridLayout(3, 2, 20, 20)); // Cria um painel com layout de grade
-        JButton option1Button = new JButton("1. TESTE DE AUTOS"); // Botão para iniciar teste de autos
-        JButton option2Button = new JButton("2. Instalar APK"); // Botão para instalar APK
-        JButton option3Button = new JButton("3. Recolher logs 4Mobi"); // Botão para coletar logs 4Mobi
-        JButton option4Button = new JButton("4. Recolher logs 4Driver"); // Botão para coletar logs 4Driver
-        JButton option5Button = new JButton("5. Ecrã Remoto"); // Botão para controle de ecrã remoto
-        JButton screenshotButton = new JButton("6. Capturar de Ecrã"); // Botão para capturar ecrã
+        JButton option1Button = new JButton("TESTE DE AUTOS - ML"); // Botão para iniciar teste de autos
+        JButton option2Button = new JButton("Instalar APK"); // Botão para instalar APK
+        JButton option3Button = new JButton("Recolher logs 4Mobi"); // Botão para coletar logs 4Mobi
+        JButton option4Button = new JButton("Recolher logs 4Driver"); // Botão para coletar logs 4Driver
+        JButton option5Button = new JButton("Ecrã Remoto"); // Botão para controle de tela remoto
+        JButton screenshotButton = new JButton("Capturar Tela"); // Botão para capturar tela
+        JButton stopServicesButton = new JButton("Stop Services"); // Botão para parar serviços
+        JButton startRecordingButton = new JButton("Start Recording"); // Botão para iniciar a gravação de tela
         buttonPanel.add(option1Button); // Adiciona botão ao painel
         buttonPanel.add(option2Button); // Adiciona botão ao painel
         buttonPanel.add(option3Button); // Adiciona botão ao painel
         buttonPanel.add(option4Button); // Adiciona botão ao painel
         buttonPanel.add(option5Button); // Adiciona botão ao painel
-        buttonPanel.add(screenshotButton); // Adiciona o novo botão de captura de ecrã ao painel
+        buttonPanel.add(screenshotButton); // Adiciona o novo botão de captura de tela ao painel
+        buttonPanel.add(stopServicesButton); // Adiciona o novo botão de parar serviços ao painel
+        buttonPanel.add(startRecordingButton); // Adiciona o botão de iniciar gravação ao painel
         add(buttonPanel, BorderLayout.CENTER); // Adiciona o painel de botões ao centro da janela principal
+        helperButton.setPreferredSize(new Dimension(70, 30));
+
+        add(buttonPanel, BorderLayout.CENTER); // Adiciona o painel de botões ao centro da janela principal
+
+
 
         // Ação do botão 1 (Teste de autos)
         option1Button.addActionListener(new ActionListener() {
@@ -122,11 +144,11 @@ public class C4BSimplifier extends JFrame {
                     showErrorMessage("Nenhum dispositivo ADB encontrado ou mais de um dispositivo conectado. Verifique a conexão dos dispositivos.");
                     return;
                 }
-                Scrcpy.executeAdbSrcSpy(); // Inicia o controle de ecrã remoto
+                Scrcpy.executeAdbSrcSpy(); // Inicia o controle de tela remoto
             }
         });
 
-        // Ação do botão de captura de ecrã
+        // Ação do botão de captura de tela
         screenshotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -134,15 +156,42 @@ public class C4BSimplifier extends JFrame {
                     showErrorMessage("Nenhum dispositivo ADB encontrado ou mais de um dispositivo conectado. Verifique a conexão dos dispositivos.");
                     return;
                 }
-                ScreenShot.captureScreenShot(); // Chama o método de captura de ecrã
+                ScreenShot.captureScreenShot(); // Chama o método de captura de tela
+            }
+        });
+
+        // Ação do botão Stop Services
+        stopServicesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isSingleAdbDeviceConnected()) {
+                    showErrorMessage("Nenhum dispositivo ADB encontrado ou mais de um dispositivo conectado. Verifique a conexão dos dispositivos.");
+                    return;
+                }
+                showLogWindow();
+                logMessage("Parando serviços 4driver ou 4mobi.");
+                StopServices.stopServices();
+                logMessage("Serviços 4driver ou 4mobi foram parados.");
+            }
+        });
+
+        // Ação do botão Start Recording
+        startRecordingButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isSingleAdbDeviceConnected()) {
+                    showErrorMessage("Nenhum dispositivo ADB encontrado ou mais de um dispositivo conectado. Verifique a conexão dos dispositivos.");
+                    return;
+                }
+
+                ScreenRecordWithScrcpy.startRecording(C4BSimplifier.this);
             }
         });
     }
 
-    /**
-     * Verifica se há exatamente um dispositivo ADB conectado.
-     * @return true se apenas um dispositivo estiver conectado, false caso contrário
-     */
+    // Restante do código da classe...
+
+    // Verifica se há exatamente um dispositivo ADB conectado.
     private boolean isSingleAdbDeviceConnected() {
         try {
             Process process = Runtime.getRuntime().exec("adb devices"); // Executa o comando adb devices
@@ -161,9 +210,7 @@ public class C4BSimplifier extends JFrame {
         }
     }
 
-    /**
-     * Exibe uma janela de log.
-     */
+    // Exibe uma janela de log.
     void showLogWindow() {
         JFrame logFrame = new JFrame("Logs"); // Cria uma nova janela de log
         logFrame.setSize(500, 400); // Define o tamanho da janela
@@ -171,7 +218,7 @@ public class C4BSimplifier extends JFrame {
         logArea = new JTextArea(); // Cria uma área de texto para os logs
         logArea.setEditable(false); // Torna a área de texto somente leitura
         JScrollPane scrollPane = new JScrollPane(logArea); // Cria um painel de rolagem para a área de texto
-        JButton stopButton = new JButton("Parar"); // Botão para parar a simulação
+        JButton stopButton = new JButton("Fechar"); // Botão para parar a simulação
         stopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -185,9 +232,19 @@ public class C4BSimplifier extends JFrame {
         InstallerAPK.setLogArea(logArea); // Define a área de log para a instalação de APKs
     }
 
-    /**
-     * Exibe um formulário para a coleta de logs 4Mobi.
-     */
+    // Método para abrir o arquivo helper.txt
+    private void openHelperFile() {
+        try {
+            File file = new File("helper.txt");
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(file);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            showErrorMessage("Erro ao abrir o arquivo helper.txt");
+        }
+    }
+
+    // Exibe um formulário para a coleta de logs 4Mobi.
     void showLogCollectionForm() {
         JFrame formFrame = new JFrame("Recolher logs 4Mobi"); // Cria uma nova janela para o formulário de coleta de logs
         formFrame.setSize(600, 500); // Define o tamanho da janela
@@ -195,7 +252,7 @@ public class C4BSimplifier extends JFrame {
         formFrame.setLocationRelativeTo(this); // Define a posição da janela em relação a esta janela
 
         JLabel companyLabel = new JLabel("Empresa:"); // Rótulo para selecionar a empresa
-        JComboBox<String> companyField = new JComboBox<>(new String[]{"ml", "ca"}); // Campo para selecionar a empresa
+        JComboBox<String> companyField = new JComboBox<>(new String[]{"ml", "ca","tml"}); // Campo para selecionar a empresa
 
         JLabel terminalLabel = new JLabel("Número do Terminal:"); // Rótulo para digitar o número do terminal
         JTextField terminalField = new JTextField(); // Campo para digitar o número do terminal
@@ -232,12 +289,7 @@ public class C4BSimplifier extends JFrame {
         formFrame.setVisible(true); // Torna a janela do formulário visível
     }
 
-    /**
-     * Invoca o processo de coleta de logs.
-     * @param company empresa selecionada
-     * @param terminal número do terminal
-     * @param formLogArea área de texto para exibição de logs
-     */
+    // Invoca o processo de coleta de logs.
     private void invokeGetLogs(String company, String terminal, JTextArea formLogArea) {
         String baseFolderPath = "/sdcard/card4b/public/"; // Caminho base para a coleta de logs
         String folderPath = baseFolderPath + company.toLowerCase() + "/machines/" + terminal + "/"; // Caminho completo para os logs
@@ -245,10 +297,7 @@ public class C4BSimplifier extends JFrame {
         GetLogs4Mobi.collectLogs(company, terminal, formLogArea); // Chama o método para coletar logs 4Mobi
     }
 
-    /**
-     * Cria um diretório se ele não existir.
-     * @param directoryName nome do diretório a ser criado
-     */
+    // Cria um diretório se ele não existir.
     private void createDirectoryIfNotExists(String directoryName) {
         File directory = new File(directoryName); // Cria um objeto File com o nome do diretório
         if (!directory.exists()) { // Verifica se o diretório não existe
@@ -261,10 +310,7 @@ public class C4BSimplifier extends JFrame {
         }
     }
 
-    /**
-     * Registra uma mensagem de log na área de texto.
-     * @param message mensagem a ser registrada
-     */
+    // Registra uma mensagem de log na área de texto.
     void logMessage(String message) {
         if (logArea != null) {
             logArea.append(message + "\n"); // Adiciona a mensagem à área de texto
@@ -272,18 +318,12 @@ public class C4BSimplifier extends JFrame {
         }
     }
 
-    /**
-     * Exibe uma mensagem de erro em uma caixa de diálogo.
-     * @param message mensagem de erro a ser exibida
-     */
+    // Exibe uma mensagem de erro em uma caixa de diálogo.
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Erro de Conexão ADB", JOptionPane.ERROR_MESSAGE); // Exibe a mensagem de erro em uma caixa de diálogo
     }
 
-    /**
-     * Método principal para iniciar o aplicativo.
-     * @param args argumentos da linha de comando (não utilizados)
-     */
+    // Método principal para iniciar o aplicativo.
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override

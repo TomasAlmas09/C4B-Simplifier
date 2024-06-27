@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Card4B - Simplifier">
+    <output-path>$USER_HOME$/Desktop/Card4B - Simplifier</output-path>
+    <root id="archive" name="Card4B - Simplifier.jar">
+      <element id="module-output" name="C4B - Simplifier" />
+    </root>
+  </artifact>
+</component>
