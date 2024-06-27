@@ -14,9 +14,9 @@ public class C4BSimplifier extends JFrame {
     public C4BSimplifier() {
         // Configuração do JFrame principal
         setTitle("Card4b - Simplifier"); // Define o título da janela
-        setSize(700, 600); // Define o tamanho da janela
+        setSize(600, 250); // Define o tamanho da janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Encerra o programa ao fechar a janela
-        setLocationRelativeTo(null); // Centraliza a janela na tela
+        setLocationRelativeTo(null); // Centraliza a janela na ecrã
         setLayout(new BorderLayout()); // Define o layout da janela como BorderLayout
 
         // Criar pastas "APK", "logs" e "4Driver Logs" se não existirem
@@ -29,7 +29,7 @@ public class C4BSimplifier extends JFrame {
         // Painel superior com logo e título
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Cria um painel com layout de fluxo centralizado
         ImageIcon originalIcon = new ImageIcon("assets/card4b-logo.png"); // Carrega o ícone do logo
-        Image originalImage = originalIcon.getImage().getScaledInstance(100, 60, Image.SCALE_SMOOTH); // Redimensiona o ícone
+        Image originalImage = originalIcon.getImage().getScaledInstance(80, 60, Image.SCALE_SMOOTH); // Redimensiona o ícone
         ImageIcon logoIcon = new ImageIcon(originalImage); // Cria um novo ícone redimensionado
         JLabel logoLabel = new JLabel(logoIcon); // Cria um rótulo com o ícone
         JLabel titleLabel = new JLabel("Card4b - Simplifier", SwingConstants.CENTER); // Cria um rótulo com o título centralizado
@@ -39,7 +39,7 @@ public class C4BSimplifier extends JFrame {
         add(titlePanel, BorderLayout.NORTH); // Adiciona o painel ao norte da janela principal
 
         // Botão para abrir helper.txt
-        JButton helperButton = new JButton("Help"); // Cria um botão com o texto "Help"
+        JButton helperButton = new JButton("HELP"); // Cria um botão com o texto "Help"
         helperButton.setPreferredSize(new Dimension(30, 30)); // Define o tamanho pequeno
         helperButton.setToolTipText("Abrir helper.txt");
         helperButton.addActionListener(new ActionListener() {
@@ -59,24 +59,33 @@ public class C4BSimplifier extends JFrame {
         JButton option2Button = new JButton("Instalar APK"); // Botão para instalar APK
         JButton option3Button = new JButton("Recolher logs 4Mobi"); // Botão para coletar logs 4Mobi
         JButton option4Button = new JButton("Recolher logs 4Driver"); // Botão para coletar logs 4Driver
-        JButton option5Button = new JButton("Ecrã Remoto"); // Botão para controle de tela remoto
-        JButton screenshotButton = new JButton("Capturar Tela"); // Botão para capturar tela
+        JButton option5Button = new JButton("Ecrã Remoto"); // Botão para controle de ecrã remoto
+        JButton screenshotButton = new JButton("Capturar ecrã"); // Botão para capturar ecrã
         JButton stopServicesButton = new JButton("Stop Services"); // Botão para parar serviços
-        JButton startRecordingButton = new JButton("Start Recording"); // Botão para iniciar a gravação de tela
-        buttonPanel.add(option1Button); // Adiciona botão ao painel
+        JButton startRecordingButton = new JButton("Gravar ecrã"); // Botão para iniciar a gravação de ecrã
+        JButton openCard4CardsButton = new JButton("Abrir Card4Cards"); // Botão para abrir o aplicativo Card4Cards
+
         buttonPanel.add(option2Button); // Adiciona botão ao painel
         buttonPanel.add(option3Button); // Adiciona botão ao painel
         buttonPanel.add(option4Button); // Adiciona botão ao painel
         buttonPanel.add(option5Button); // Adiciona botão ao painel
-        buttonPanel.add(screenshotButton); // Adiciona o novo botão de captura de tela ao painel
-        buttonPanel.add(stopServicesButton); // Adiciona o novo botão de parar serviços ao painel
+        buttonPanel.add(screenshotButton); // Adiciona o novo botão de captura de ecrã ao painel
         buttonPanel.add(startRecordingButton); // Adiciona o botão de iniciar gravação ao painel
+        buttonPanel.add(stopServicesButton); // Adiciona o novo botão de parar serviços ao painel
+        buttonPanel.add(option1Button); // Adiciona botão ao painel
+        buttonPanel.add(openCard4CardsButton); // Adiciona o botão de abrir Card4Cards ao painel
         add(buttonPanel, BorderLayout.CENTER); // Adiciona o painel de botões ao centro da janela principal
         helperButton.setPreferredSize(new Dimension(70, 30));
 
         add(buttonPanel, BorderLayout.CENTER); // Adiciona o painel de botões ao centro da janela principal
 
-
+        // Ação do botão "Abrir Card4Cards"
+        openCard4CardsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openCard4Cards();
+            }
+        });
 
         // Ação do botão 1 (Teste de autos)
         option1Button.addActionListener(new ActionListener() {
@@ -144,11 +153,11 @@ public class C4BSimplifier extends JFrame {
                     showErrorMessage("Nenhum dispositivo ADB encontrado ou mais de um dispositivo conectado. Verifique a conexão dos dispositivos.");
                     return;
                 }
-                Scrcpy.executeAdbSrcSpy(); // Inicia o controle de tela remoto
+                Scrcpy.executeAdbSrcSpy(); // Inicia o controle de ecrã remoto
             }
         });
 
-        // Ação do botão de captura de tela
+        // Ação do botão de captura de ecrã
         screenshotButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -156,7 +165,7 @@ public class C4BSimplifier extends JFrame {
                     showErrorMessage("Nenhum dispositivo ADB encontrado ou mais de um dispositivo conectado. Verifique a conexão dos dispositivos.");
                     return;
                 }
-                ScreenShot.captureScreenShot(); // Chama o método de captura de tela
+                ScreenShot.captureScreenShot(); // Chama o método de captura de ecrã
             }
         });
 
@@ -321,6 +330,27 @@ public class C4BSimplifier extends JFrame {
     // Exibe uma mensagem de erro em uma caixa de diálogo.
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Erro de Conexão ADB", JOptionPane.ERROR_MESSAGE); // Exibe a mensagem de erro em uma caixa de diálogo
+    }
+
+    // Método para abrir o aplicativo Card4Cards
+    private void openCard4Cards() {
+
+        // Caminho para o diretório onde o aplicativo Card4Cards.exe está localizado
+        String userHome = System.getProperty("user.home");
+        String appPath = userHome + File.separator + "appdata" + File.separator + "roaming" + File.separator + ".Card4Cards" + File.separator + "bin" + File.separator + "Card4Cards.exe";
+        File appFile = new File(appPath);
+
+        if (!appFile.exists()) {
+            showErrorMessage("O arquivo Card4Cards.exe não foi encontrado no caminho especificado: " + appPath);
+            return;
+        }
+
+        try {
+            JOptionPane.showMessageDialog(this, "Card4Cards aberto com sucesso!\n\n              Clique OK", "Sucess", JOptionPane.INFORMATION_MESSAGE); // Exibe a mensagem de erro em uma caixa de diálogo
+            Runtime.getRuntime().exec(appFile.getAbsolutePath());
+        } catch (IOException e) {
+            showErrorMessage("Erro ao tentar abrir o aplicativo Card4Cards: " + e.getMessage());
+        }
     }
 
     // Método principal para iniciar o aplicativo.
