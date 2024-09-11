@@ -121,8 +121,14 @@ public class GetLogs4Mobi {
                 logMessage(logArea, "Nenhum arquivo encontrado na pasta " + folderPath);
             }
 
-        } catch (IOException | InterruptedException e) {
-            logMessage(logArea, "Erro ao executar o processo: " + e.getMessage());
+        } catch (IOException e) {
+            logMessage(logArea, "Erro de I/O ao executar o processo: " + e.getMessage());
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            logMessage(logArea, "O processo foi interrompido: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            logMessage(logArea, "Ocorreu um erro inesperado: " + e.getMessage());
             e.printStackTrace();
         }
     }

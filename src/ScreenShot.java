@@ -22,10 +22,14 @@ public class ScreenShot {
         if (screenshotFiles != null && screenshotFiles.length > 0) {
             // Se encontrou arquivos de screenshot na pasta
 
-            // Ordena os arquivos por nome para encontrar o maior número usado
-            Arrays.sort(screenshotFiles, Comparator.comparing(File::getName));
+            // Ordena os arquivos por número, extraindo o número do nome do arquivo
+            Arrays.sort(screenshotFiles, (f1, f2) -> {
+                int num1 = Integer.parseInt(f1.getName().replace("screenshot_", "").replace(".png", ""));
+                int num2 = Integer.parseInt(f2.getName().replace("screenshot_", "").replace(".png", ""));
+                return Integer.compare(num1, num2);
+            });
 
-            // Obtém o nome do último arquivo (o mais recente de acordo com a ordenação)
+            // Obtém o nome do último arquivo (o com o maior número)
             String lastFileName = screenshotFiles[screenshotFiles.length - 1].getName();
 
             // Extrai o número do último arquivo
@@ -41,6 +45,7 @@ public class ScreenShot {
             return 0;
         }
     }
+
 
     // Método estático para capturar uma screenshot
     public static void captureScreenShot() {

@@ -14,7 +14,7 @@ public class C4BSimplifier extends JFrame {
     public C4BSimplifier() {
         // Configuração do JFrame principal
         setTitle("Card4b - Simplifier"); // Define o título da janela
-        setSize(600, 250); // Define o tamanho da janela
+        setSize(1000, 250); // Define o tamanho da janela
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Encerra o programa ao fechar a janela
         setLocationRelativeTo(null); // Centraliza a janela na ecrã
         setLayout(new BorderLayout()); // Define o layout da janela como BorderLayout
@@ -25,11 +25,12 @@ public class C4BSimplifier extends JFrame {
         createDirectoryIfNotExists("4Driver Logs");
         createDirectoryIfNotExists("Screenshots");
         createDirectoryIfNotExists("Recordings");
+        createDirectoryIfNotExists("Agentes");
 
         // Painel superior com logo e título
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); // Cria um painel com layout de fluxo centralizado
         ImageIcon originalIcon = new ImageIcon("assets/card4b-logo.png"); // Carrega o ícone do logo
-        Image originalImage = originalIcon.getImage().getScaledInstance(80, 60, Image.SCALE_SMOOTH); // Redimensiona o ícone
+        Image originalImage = originalIcon.getImage().getScaledInstance(100, 60, Image.SCALE_SMOOTH); // Redimensiona o ícone
         ImageIcon logoIcon = new ImageIcon(originalImage); // Cria um novo ícone redimensionado
         JLabel logoLabel = new JLabel(logoIcon); // Cria um rótulo com o ícone
         JLabel titleLabel = new JLabel("Card4b - Simplifier", SwingConstants.CENTER); // Cria um rótulo com o título centralizado
@@ -40,8 +41,9 @@ public class C4BSimplifier extends JFrame {
 
         // Botão para abrir helper.txt
         JButton helperButton = new JButton("HELP"); // Cria um botão com o texto "Help"
-        helperButton.setPreferredSize(new Dimension(30, 30)); // Define o tamanho pequeno
+        helperButton.setPreferredSize(new Dimension(700, 300)); // Define o tamanho do botão
         helperButton.setToolTipText("Abrir helper.txt");
+
         helperButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -50,12 +52,14 @@ public class C4BSimplifier extends JFrame {
         });
         titlePanel.add(helperButton);
 
+
         // Ícone do aplicativo
         setIconImage(originalIcon.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH)); // Define o ícone da aplicação
 
         // Painel central com botões
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 2, 20, 20)); // Cria um painel com layout de grade
+        JPanel buttonPanel = new JPanel(new GridLayout(3, 2, 10, 10)); // Cria um painel com layout de grade
         JButton option1Button = new JButton("TESTE DE AUTOS - ML"); // Botão para iniciar teste de autos
+        JButton tmlTester = new JButton("TESTE DE AUTOS - TML"); // Botão para iniciar teste de autos
         JButton option2Button = new JButton("Instalar APK"); // Botão para instalar APK
         JButton option3Button = new JButton("Recolher logs 4Mobi"); // Botão para coletar logs 4Mobi
         JButton option4Button = new JButton("Recolher logs 4Driver"); // Botão para coletar logs 4Driver
@@ -63,6 +67,10 @@ public class C4BSimplifier extends JFrame {
         JButton screenshotButton = new JButton("Capturar ecrã"); // Botão para capturar ecrã
         JButton stopServicesButton = new JButton("Stop Services"); // Botão para parar serviços
         JButton startRecordingButton = new JButton("Gravar ecrã"); // Botão para iniciar a gravação de ecrã
+        JButton getAgents = new JButton("Get Agentes"); // Botão para abrir
+        JButton apexTester = new JButton("Apex Tester"); // Botão para abrir
+        JButton cardEditor = new JButton("Card Editor"); // Botão para abrir
+        JButton coneConfig = new JButton("C-One Config"); // Botão para abrir
         JButton openCard4CardsButton = new JButton("Abrir Card4Cards"); // Botão para abrir o aplicativo Card4Cards
 
         buttonPanel.add(option2Button); // Adiciona botão ao painel
@@ -73,6 +81,11 @@ public class C4BSimplifier extends JFrame {
         buttonPanel.add(startRecordingButton); // Adiciona o botão de iniciar gravação ao painel
         buttonPanel.add(stopServicesButton); // Adiciona o novo botão de parar serviços ao painel
         buttonPanel.add(option1Button); // Adiciona botão ao painel
+        buttonPanel.add(tmlTester); // Adiciona botão ao painel
+        buttonPanel.add(getAgents); // Adiciona botão ao painel
+        buttonPanel.add(apexTester); // Adiciona botão ao painel
+        buttonPanel.add(cardEditor); // Adiciona botão ao painel
+        buttonPanel.add(coneConfig); // Adiciona botão ao painel
         buttonPanel.add(openCard4CardsButton); // Adiciona o botão de abrir Card4Cards ao painel
         add(buttonPanel, BorderLayout.CENTER); // Adiciona o painel de botões ao centro da janela principal
         helperButton.setPreferredSize(new Dimension(70, 30));
@@ -101,6 +114,20 @@ public class C4BSimplifier extends JFrame {
             }
         });
 
+        // Ação do botão 1 (Teste de autos)
+        tmlTester.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isSingleAdbDeviceConnected()) {
+                    showErrorMessage("Nenhum dispositivo ADB encontrado ou mais de um dispositivo conectado. Verifique a conexão dos dispositivos.");
+                    return;
+                }
+                showLogWindow();
+                logMessage("1. Teste de autos TML iniciado.");
+                TMLTester.startSimulation();
+            }
+        });
+
         // Ação do botão 2 (Instalar APK)
         option2Button.addActionListener(new ActionListener() {
             @Override
@@ -109,16 +136,27 @@ public class C4BSimplifier extends JFrame {
                     showErrorMessage("Nenhum dispositivo ADB encontrado ou mais de um dispositivo conectado. Verifique a conexão dos dispositivos.");
                     return;
                 }
-
-                String apkFileName = JOptionPane.showInputDialog(C4BSimplifier.this, "Digite o nome do arquivo APK:");
-                if (apkFileName != null && !apkFileName.isEmpty()) {
-                    showLogWindow();
-                    logMessage("Instalação do APK '" + apkFileName + "' iniciada.");
-                    InstallerAPK.installApkWithDelay(apkFileName.trim()); // Inicia a instalação do APK com o nome fornecido
-                } else {
-                    showErrorMessage("Nome do arquivo APK inválido.");
+                File logsFolder = new File("apk");
+                if (logsFolder.exists() && logsFolder.isDirectory()) {
+                    try {
+                        Desktop.getDesktop().open(logsFolder);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    String apkFileName = JOptionPane.showInputDialog(C4BSimplifier.this, "Digite o nome do arquivo APK:");
+                    if (apkFileName != null && !apkFileName.isEmpty()) {
+                        showLogWindow();
+                        logMessage("Instalação do APK '" + apkFileName + "' iniciada.");
+                        InstallerAPK.installApkWithDelay(apkFileName.trim()); // Inicia a instalação do APK com o nome fornecido
+                    } else {
+                        showErrorMessage("Nome do arquivo APK inválido.");
+                    }
+                }else{
+                    showErrorMessage("Dirétorio apk não encontrado.");
                 }
-            }
+
+                }
+
         });
 
         // Ação do botão 3 (Recolher logs C-ONE)
@@ -196,9 +234,97 @@ public class C4BSimplifier extends JFrame {
                 ScreenRecordWithScrcpy.startRecording(C4BSimplifier.this);
             }
         });
+
+        // Ação do botão Start Recording
+        cardEditor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CardEditor.executeCardEditor();
+            }
+        });
+
+        // Ação do botão Start Recording
+        apexTester.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                File logsFolder = new File("packages/apexTester/app");
+                if (logsFolder.exists() && logsFolder.isDirectory()) {
+                    try {
+                        showInfo("Abre o arquivo run.bat");
+                        Desktop.getDesktop().open(logsFolder);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }else{
+                    showErrorMessage("Dirétorio packages/apexTester/app não encontrado.");
+                }
+
+            }
+        });
+
+        // Ação do botão Get Agentes
+        getAgents.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!isSingleAdbDeviceConnected()) {
+                    showErrorMessage("Nenhum dispositivo ADB encontrado ou mais de um dispositivo conectado. Verifique a conexão dos dispositivos.");
+                    return;
+                }
+                showAgentCollectionForm(); // Mostra o formulário para coletar agentes
+            }
+        });
+
+
+        // Ação do botão C-One Config
+        coneConfig.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                logMessage("Botão C-One Config pressionado."); // Log para verificar se a ação está sendo disparada
+                new COneConfig(); // Criar e exibir a janela de configuração
+            }
+        });
+
+
+
+
     }
 
-    // Restante do código da classe...
+    // Método para exibir o formulário de coleta de agentes
+    private void showAgentCollectionForm() {
+        JFrame agentFormFrame = new JFrame("Recolher Agentes"); // Cria uma nova janela para o formulário de coleta de agentes
+        agentFormFrame.setSize(400, 200); // Define o tamanho da janela
+        agentFormFrame.setLayout(new GridLayout(3, 1)); // Define o layout da janela como GridLayout
+        agentFormFrame.setLocationRelativeTo(this); // Define a posição da janela em relação a esta janela
+
+        JLabel companyLabel = new JLabel("Empresa:"); // Rótulo para selecionar a empresa
+        JComboBox<String> companyField = new JComboBox<>(new String[]{"ml", "rdl", "tml", "ca"}); // Campo para selecionar a empresa
+
+        JButton confirmButton = new JButton("Confirmar"); // Botão para confirmar a coleta de agentes
+
+        agentFormFrame.add(companyLabel); // Adiciona o rótulo da empresa à janela
+        agentFormFrame.add(companyField); // Adiciona o campo de seleção de empresa à janela
+        agentFormFrame.add(confirmButton); // Adiciona o botão de confirmação à janela
+
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String company = (String) companyField.getSelectedItem(); // Obtém a empresa selecionada
+                agentFormFrame.dispose(); // Fecha a janela de formulário
+                collectAgents(company); // Chama o método para coletar agentes com a empresa selecionada
+            }
+        });
+
+        agentFormFrame.setVisible(true); // Torna a janela do formulário visível
+    }
+
+    // Método para coletar os agentes com base na empresa selecionada
+    private void collectAgents(String company) {
+        showLogWindow(); // Mostra a janela de log no aplicativo
+        logMessage("Recolhendo agentes para Empresa: " + company); // Registra mensagem de início de operação
+        GetAgents.collectAgent(this, company); // Chama o método para coletar agentes na classe GetAgents
+    }
+
 
     // Verifica se há exatamente um dispositivo ADB conectado.
     private boolean isSingleAdbDeviceConnected() {
@@ -261,7 +387,7 @@ public class C4BSimplifier extends JFrame {
         formFrame.setLocationRelativeTo(this); // Define a posição da janela em relação a esta janela
 
         JLabel companyLabel = new JLabel("Empresa:"); // Rótulo para selecionar a empresa
-        JComboBox<String> companyField = new JComboBox<>(new String[]{"ml", "ca","tml"}); // Campo para selecionar a empresa
+        JComboBox<String> companyField = new JComboBox<>(new String[]{"ml", "ca","tml", "rdl"}); // Campo para selecionar a empresa
 
         JLabel terminalLabel = new JLabel("Número do Terminal:"); // Rótulo para digitar o número do terminal
         JTextField terminalField = new JTextField(); // Campo para digitar o número do terminal
@@ -330,6 +456,10 @@ public class C4BSimplifier extends JFrame {
     // Exibe uma mensagem de erro em uma caixa de diálogo.
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Erro de Conexão ADB", JOptionPane.ERROR_MESSAGE); // Exibe a mensagem de erro em uma caixa de diálogo
+    }
+    // Exibe uma mensagem de erro em uma caixa de diálogo.
+    private void showInfo(String message) {
+        JOptionPane.showMessageDialog(this, message, "Erro de Conexão ADB", JOptionPane.INFORMATION_MESSAGE); // Exibe a mensagem de info em uma caixa de diálogo
     }
 
     // Método para abrir o aplicativo Card4Cards

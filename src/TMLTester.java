@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MLTester {
+public class TMLTester {
 
     private static final String ADB_PATH = "adb"; // Caminho para o comando ADB
     private static Timer actionTimer;
@@ -18,7 +18,7 @@ public class MLTester {
     // Classe interna para representar uma ação a ser executada
     private static class Action {
         enum ActionType {
-            TAP, SWIPE, INPUT_TEXT, ADB_KEY_EVENT, ADB_NEXT
+            TAP, SWIPE, INPUT_TEXT, ADB_KEY_EVENT, ADB_NEXT, ADB_ENTER
         }
 
         ActionType type;
@@ -102,41 +102,54 @@ public class MLTester {
     public static void startSimulation() {
         if (!isRunning) {
             // Adiciona as ações à lista de ações
-            ACTIONS.add(new Action(new Coordinate(392, 482, 4000), "Abrir turno"));
             ACTIONS.add(new Action(new Coordinate(379, 375, 4000), "Abrir serviço"));
+            ACTIONS.add(new Action(new Coordinate(320, 985, 4000), "Fechar QR Code"));
             ACTIONS.add(new Action(new Coordinate(186, 358, 4000), "Linha"));
             ACTIONS.add(new Action(new Coordinate(186, 358, 4000), "Estação"));
             ACTIONS.add(new Action(new Coordinate(186, 358, 4000), "Dentro comboio"));
-            ACTIONS.add(new Action(new Coordinate(100, 1200, 5000), "Confirmar Resumo"));
-            ACTIONS.add(new Action(new Coordinate(100, 1200, 8000), "Infração"));
+            ACTIONS.add(new Action(new Coordinate(186, 358, 4000), "Dentro comboio"));
+            ACTIONS.add(new Action(new InputText("1", 5000), "Veiculo"));
+            ACTIONS.add(new Action(new Coordinate(186, 275, 4000), "Dentro comboio"));
+            ACTIONS.add(new Action(new Coordinate(620, 1100, 4000), "Dentro comboio"));
+            ACTIONS.add(new Action(new Coordinate(100, 1100, 5000), "Confirmar Resumo"));
+            ACTIONS.add(new Action(new Coordinate(100, 1100, 8000), "Infração"));
             ACTIONS.add(new Action(new Coordinate(300, 600, 4000), "Nível"));
             ACTIONS.add(new Action(new Coordinate(300, 600, 4000), "Artigo"));
             ACTIONS.add(new Action(new Swipe(500, 1000, 500, 0, 5000), "Swipe para baixo"));
-            ACTIONS.add(new Action(new Coordinate(500, 1000, 5000), "Infrator recusou assinar"));
-            // ACTIONS.add(new Action(new Coordinate(650, 688, 4000), "NS"));
-            ACTIONS.add(new Action(new Coordinate(680, 1130, 4000), "Dados"));
+            ACTIONS.add(new Action(new Coordinate(643, 673, 5000), "Infrator recusou assinar"));
+            ACTIONS.add(new Action(new Coordinate(547, 960, 4000), "Dados"));
+            ACTIONS.add(new Action(new Coordinate(269, 267, 4000), "Dados"));
             ACTIONS.add(new Action(new InputText("Hello", 5000), "Inserir nome"));
             ACTIONS.add(new Action(4000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
             ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
             ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
-            ACTIONS.add(new Action(new Coordinate(244, 491, 5000), "Documento de identificação"));
-            ACTIONS.add(new Action(new Coordinate(90, 879, 5000), "Tipo de documento Outros"));
-            // ACTIONS.add(new Action(new Swipe(500, 500, 500, 200, 4000), "Swipe para baixo"));
-            // ACTIONS.add(new Action(new Coordinate(232, 363, 4000), "Selecionar campo detalhes de documento"));
+            ACTIONS.add(new Action(2000, "Enter", Action.ActionType.ADB_ENTER));
+            ACTIONS.add(new Action(new Coordinate(127, 247, 5000), "CC"));
             ACTIONS.add(new Action(4000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
             ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
             ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
+            ACTIONS.add(new Action(4000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
             ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
-            ACTIONS.add(new Action(new InputText("Doc", 4000), "Inserir detalhes do documento"));
-            //  ACTIONS.add(new Action(4000, "Pressionar tecla de volta (BACK)", Action.ActionType.ADB_KEY_EVENT));
+            ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
+            ACTIONS.add(new Action(new InputText("123456789", 5000), "Inserir nome"));
+            ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
+            ACTIONS.add(new Action(new InputText("123456789", 5000), "Inserir nome"));
+            ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
+            ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_NEXT));
+            ACTIONS.add(new Action(new InputText("dsadadaddada", 5000), "Inserir nome"));
+            ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_KEY_EVENT));
             ACTIONS.add(new Action(new Coordinate(385, 1100, 4000), "Confirmar"));
-            ACTIONS.add(new Action(new Coordinate(385, 1100, 6000), "Guardar"));
-            ACTIONS.add(new Action(new Coordinate(335, 730, 9000), "Confirmar Impressão"));
-            ACTIONS.add(new Action(4000, "Pressionar tecla de volta (BACK)", Action.ActionType.ADB_KEY_EVENT));
-            ACTIONS.add(new Action(new Coordinate(310, 510, 4000), "Terminal Serviço"));
-            ACTIONS.add(new Action(new Coordinate(500, 740, 4000), "Confirmar"));
-            ACTIONS.add(new Action(new Coordinate(385, 1100, 4000), "Fechar turno"));
-            ACTIONS.add(new Action(new Coordinate(500, 1000, 4000), "Confirmar"));
+            ACTIONS.add(new Action(new Coordinate(525, 1000, 4000), "Guardar"));
+            ACTIONS.add(new Action(new Coordinate(550, 1100, 4000), "Guardar"));
+            ACTIONS.add(new Action(new Coordinate(525, 1000, 4000), "Guardar"));
+            ACTIONS.add(new Action(new Coordinate(347, 1015, 4000), "Guardar"));
+            ACTIONS.add(new Action(new Coordinate(300, 647, 4000), "Guardar"));
+            ACTIONS.add(new Action(new InputText("dsadadaddada", 4000), "Inserir nome"));
+            ACTIONS.add(new Action(new Coordinate(333, 1000, 4000), "Guardar"));
+            ACTIONS.add(new Action(new Coordinate(340, 700, 4000), "Guardar"));
+            ACTIONS.add(new Action(2000, "Próxima caixa de texto", Action.ActionType.ADB_KEY_EVENT));
+            ACTIONS.add(new Action(new Coordinate(341, 538, 4000), "Guardar"));
+            ACTIONS.add(new Action(new Coordinate(486, 682, 4000), "Guardar"));
 
             // Inicia a simulação
             isRunning = true;
@@ -182,6 +195,10 @@ public class MLTester {
                             case ADB_NEXT:
                                 performAdbNext(action.interval, action.description);
                                 break;
+                            case ADB_ENTER:
+                                performAdbEnter(action.interval, action.description);
+                                break;
+
                         }
                         actionIndex++;
                         if (actionIndex >= ACTIONS.size()) {
@@ -242,7 +259,21 @@ public class MLTester {
     // Método para simular próximo item focável via ADB
     private static void performAdbNext(int interval, String description) {
         try {
-            String[] command = {ADB_PATH, "shell", "input", "keyevent", "20"}; // 20 corresponde a KEYCODE_DPAD_DOWN
+            String[] command = {ADB_PATH, "shell", "input", "keyevent", "61"}; // 20 corresponde a KEYCODE_DPAD_DOWN
+            Process process = Runtime.getRuntime().exec(command);
+            process.waitFor();
+            logMessage("Evento de tecla ADB executado: Próximo item focável: " + description);
+            Thread.sleep(interval); // Aguarda o intervalo especificado
+        } catch (IOException | InterruptedException e) {
+            logMessage("Erro ao executar próximo item focável via ADB: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // Método para simular próximo item focável via ADB
+    private static void performAdbEnter(int interval, String description) {
+        try {
+            String[] command = {ADB_PATH, "shell", "input", "keyevent", "66"}; // 20 corresponde a KEYCODE_DPAD_DOWN
             Process process = Runtime.getRuntime().exec(command);
             process.waitFor();
             logMessage("Evento de tecla ADB executado: Próximo item focável: " + description);
@@ -268,7 +299,7 @@ public class MLTester {
 
     // Define a área de log para exibição das mensagens
     public static void setLogArea(JTextArea logArea) {
-        MLTester.logArea = logArea;
+        MLTester.setLogArea(logArea);
     }
 
     // Método para registrar mensagens no log de forma thread-safe
@@ -307,9 +338,5 @@ public class MLTester {
         frame.getContentPane().add(panel, BorderLayout.SOUTH);
 
         frame.setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(MLTester::createAndShowGUI);
     }
 }
