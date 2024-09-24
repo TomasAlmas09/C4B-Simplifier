@@ -58,8 +58,8 @@ public class C4BSimplifier extends JFrame {
 
         // Painel central com botões
         JPanel buttonPanel = new JPanel(new GridLayout(3, 2, 10, 10)); // Cria um painel com layout de grade
-        JButton option1Button = new JButton("TESTE DE AUTOS - ML"); // Botão para iniciar teste de autos
-        JButton tmlTester = new JButton("TESTE DE AUTOS - TML"); // Botão para iniciar teste de autos
+        // JButton option1Button = new JButton("TESTE DE AUTOS - ML"); // Botão para iniciar teste de autos
+        // JButton tmlTester = new JButton("TESTE DE AUTOS - TML"); // Botão para iniciar teste de autos
         JButton option2Button = new JButton("Instalar APK"); // Botão para instalar APK
         JButton option3Button = new JButton("Recolher logs 4Mobi"); // Botão para coletar logs 4Mobi
         JButton option4Button = new JButton("Recolher logs 4Driver"); // Botão para coletar logs 4Driver
@@ -80,8 +80,8 @@ public class C4BSimplifier extends JFrame {
         buttonPanel.add(screenshotButton); // Adiciona o novo botão de captura de ecrã ao painel
         buttonPanel.add(startRecordingButton); // Adiciona o botão de iniciar gravação ao painel
         buttonPanel.add(stopServicesButton); // Adiciona o novo botão de parar serviços ao painel
-        buttonPanel.add(option1Button); // Adiciona botão ao painel
-        buttonPanel.add(tmlTester); // Adiciona botão ao painel
+        // buttonPanel.add(option1Button); // Adiciona botão ao painel
+        // buttonPanel.add(tmlTester); // Adiciona botão ao painel
         buttonPanel.add(getAgents); // Adiciona botão ao painel
         buttonPanel.add(apexTester); // Adiciona botão ao painel
         buttonPanel.add(cardEditor); // Adiciona botão ao painel
@@ -101,7 +101,7 @@ public class C4BSimplifier extends JFrame {
         });
 
         // Ação do botão 1 (Teste de autos)
-        option1Button.addActionListener(new ActionListener() {
+       /* option1Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!isSingleAdbDeviceConnected()) {
@@ -112,10 +112,10 @@ public class C4BSimplifier extends JFrame {
                 logMessage("1. Teste de autos iniciado.");
                 MLTester.startSimulation();
             }
-        });
+        });*/
 
         // Ação do botão 1 (Teste de autos)
-        tmlTester.addActionListener(new ActionListener() {
+       /* tmlTester.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!isSingleAdbDeviceConnected()) {
@@ -126,7 +126,7 @@ public class C4BSimplifier extends JFrame {
                 logMessage("1. Teste de autos TML iniciado.");
                 TMLTester.startSimulation();
             }
-        });
+        });*/
 
         // Ação do botão 2 (Instalar APK)
         option2Button.addActionListener(new ActionListener() {

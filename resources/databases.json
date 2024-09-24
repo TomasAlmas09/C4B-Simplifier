@@ -1,0 +1,14 @@
+{
+  "databases": {
+    "TML - QA": {
+      "url": "jdbc:sqlserver://144.24.162.32:1433;instanceName=SQLEXPRESS;databaseName=WildCardCS_TML;encrypt=true;trustServerCertificate=true",
+      "user": "sa",
+      "password": "sa@card4b"
+    },
+    "TML - PROD": {
+      "url": "jdbc:sqlserver://138.3.253.40:1433;instanceName=SQLEXPRESS;databaseName=WildCardCS_TML;encrypt=true;trustServerCertificate=true",
+      "user": "sa",
+      "password": "sa@card4b"
+    }
+  }
+}
